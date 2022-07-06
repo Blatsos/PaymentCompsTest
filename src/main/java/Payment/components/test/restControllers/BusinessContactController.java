@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @RestController
 @Api(tags = {"Business Contact"})
@@ -47,6 +45,24 @@ public class BusinessContactController {
             businessContacts = businessRepo.findAll(Sort.by(Sort.Direction.ASC, "createDate"));
         }
         return businessContacts;
+    }
+
+    @GetMapping("/getResultsBySearch/{search}")
+    @ApiOperation(
+            value = "Get results by searching")
+
+    public List<BusinessContact> getBySearch(@PathVariable String search) {
+        List<BusinessContact> matches = new ArrayList<>();
+        List<BusinessContact> list = businessRepo.findAll();
+        for (BusinessContact person : list) {
+            if (person.getLastName().toLowerCase(Locale.ROOT).equals(search.toLowerCase(Locale.ROOT))
+                    || person.getFirstName().toLowerCase(Locale.ROOT).equals(search.toLowerCase(Locale.ROOT))) {
+                matches.add(person);
+            }
+        }
+        Comparator<BusinessContact> compareLastName = (person1, person2) -> person1.getLastName().compareTo(person2.getLastName());
+        Collections.sort(matches, compareLastName);
+        return matches;
     }
 
 
