@@ -6,10 +6,12 @@ import Payment.components.test.services.BusinessService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @Api(tags = {"Business Contact"})
@@ -23,8 +25,18 @@ public class BusinessContactController {
     BusinessRepo businessRepo;
 
     @GetMapping("/")
-    public List<BusinessContact> getAllBusinessContacts(){
+    public List<BusinessContact> getAllBusinessContacts() {
         return businessRepo.findAll();
+    }
+
+    @GetMapping("/getAllBusinessContactsByLastName/{order}")
+    @ApiOperation(value = "The default is by descending order", notes = "You can type asc to change to ascending order")
+    public List<BusinessContact> getBusinessContactAscOrDes(@PathVariable String order) {
+        List<BusinessContact> businessContacts = businessRepo.findAll(Sort.by(Sort.Direction.DESC, "lastName"));
+        if (Objects.equals(order, "asc")) {
+            businessContacts = businessRepo.findAll(Sort.by(Sort.Direction.ASC, "lastName"));
+        }
+        return businessContacts;
     }
 
     @PostMapping("/addBusinessContact")

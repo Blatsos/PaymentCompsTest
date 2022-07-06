@@ -7,10 +7,12 @@ import Payment.components.test.services.PersonalService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @Api(tags = {"Personal Contact"})
@@ -24,8 +26,18 @@ public class PersonalContactController {
     PersonalRepo personalRepo;
 
     @GetMapping("/")
-    public List<PersonalContact> getAllPersonalContacts(){
+    public List<PersonalContact> getAllPersonalContacts() {
         return personalRepo.findAll();
+    }
+
+    @GetMapping("/getAllPersonalContactsByLastName/{order}")
+    @ApiOperation(value = "The default is by descending order", notes = "You can type asc to change to ascending order")
+    public List<PersonalContact> getPersonalContactAscOrDes(@PathVariable String order) {
+        List<PersonalContact> personalContacts = personalRepo.findAll(Sort.by(Sort.Direction.DESC, "lastName"));
+        if (Objects.equals(order, "asc")) {
+            personalContacts = personalRepo.findAll(Sort.by(Sort.Direction.ASC, "lastName"));
+        }
+        return personalContacts;
     }
 
     @PostMapping("/addPersonalContact")
