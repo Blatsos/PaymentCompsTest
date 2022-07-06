@@ -31,7 +31,7 @@ public class PersonalContactController {
     }
 
     @GetMapping("/getAllPersonalContactsByLastName/{order}")
-    @ApiOperation(value = "The default is by descending order", notes = "You can type asc to change to ascending order")
+    @ApiOperation(value = "Get all personal contacts by their Last Name", notes = "The default is by descending order. You can type asc to change to ascending order")
     public List<PersonalContact> getPersonalContactAscOrDes(@PathVariable String order) {
         List<PersonalContact> personalContacts = personalRepo.findAll(Sort.by(Sort.Direction.DESC, "lastName"));
         if (Objects.equals(order, "asc")) {
@@ -39,6 +39,17 @@ public class PersonalContactController {
         }
         return personalContacts;
     }
+
+    @GetMapping("/getAllPersonalContactsByCreateDate/{order}")
+    @ApiOperation(value = "Get all personal contacts by their creation date", notes = "The default is by descending order. You can type asc to change to ascending order")
+    public List<PersonalContact> getPersonalContactsByCreateDate(@PathVariable String order) {
+        List<PersonalContact> personalContacts = personalRepo.findAll(Sort.by(Sort.Direction.DESC, "createDate"));
+        if (Objects.equals(order, "asc")) {
+            personalContacts = personalRepo.findAll(Sort.by(Sort.Direction.ASC, "createDate"));
+        }
+        return personalContacts;
+    }
+
 
     @PostMapping("/addPersonalContact")
     @ApiOperation(

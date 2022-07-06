@@ -30,7 +30,7 @@ public class BusinessContactController {
     }
 
     @GetMapping("/getAllBusinessContactsByLastName/{order}")
-    @ApiOperation(value = "The default is by descending order", notes = "You can type asc to change to ascending order")
+    @ApiOperation(value = "Get all business contacts by their Last Name", notes = "The default is by descending order. You can type asc to change to ascending order")
     public List<BusinessContact> getBusinessContactAscOrDes(@PathVariable String order) {
         List<BusinessContact> businessContacts = businessRepo.findAll(Sort.by(Sort.Direction.DESC, "lastName"));
         if (Objects.equals(order, "asc")) {
@@ -38,6 +38,17 @@ public class BusinessContactController {
         }
         return businessContacts;
     }
+
+    @GetMapping("/getAllBusinessContactsByCreateDate/{order}")
+    @ApiOperation(value = "Get all business contacts by their creation date", notes = "The default is by descending order. You can type asc to change to ascending order")
+    public List<BusinessContact> getBusinessContactsByCreateDate(@PathVariable String order) {
+        List<BusinessContact> businessContacts = businessRepo.findAll(Sort.by(Sort.Direction.DESC, "createDate"));
+        if (Objects.equals(order, "asc")) {
+            businessContacts = businessRepo.findAll(Sort.by(Sort.Direction.ASC, "createDate"));
+        }
+        return businessContacts;
+    }
+
 
     @PostMapping("/addBusinessContact")
     @ApiOperation(value = "Add a new business contact")
