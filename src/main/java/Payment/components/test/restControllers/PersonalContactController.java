@@ -2,6 +2,7 @@ package Payment.components.test.restControllers;
 
 
 import Payment.components.test.entities.PersonalContact;
+import Payment.components.test.repositories.PersonalRepo;
 import Payment.components.test.services.PersonalService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @Api(tags = {"Personal Contact"})
@@ -17,6 +19,14 @@ public class PersonalContactController {
 
     @Autowired
     PersonalService personalService;
+
+    @Autowired
+    PersonalRepo personalRepo;
+
+    @GetMapping("/")
+    public List<PersonalContact> getAllPersonalContacts(){
+        return personalRepo.findAll();
+    }
 
     @PostMapping("/addPersonalContact")
     @ApiOperation(

@@ -1,6 +1,7 @@
 package Payment.components.test.restControllers;
 
 import Payment.components.test.entities.BusinessContact;
+import Payment.components.test.repositories.BusinessRepo;
 import Payment.components.test.services.BusinessService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @Api(tags = {"Business Contact"})
@@ -16,6 +18,14 @@ public class BusinessContactController {
 
     @Autowired
     BusinessService businessService;
+
+    @Autowired
+    BusinessRepo businessRepo;
+
+    @GetMapping("/")
+    public List<BusinessContact> getAllBusinessContacts(){
+        return businessRepo.findAll();
+    }
 
     @PostMapping("/addBusinessContact")
     @ApiOperation(value = "Add a new business contact")
